@@ -15,7 +15,7 @@ class ProductRepository(client.db.Repository.Repository):
     def get_all_products(self):
                     
         cursor = self._conn.cursor()            
-        query = ("SELECT * FROM product;")
+        query = ("SELECT ProductId, Stock, Name FROM product;")
         cursor.execute(query)
         results = cursor.fetchall()
         
@@ -24,6 +24,16 @@ class ProductRepository(client.db.Repository.Repository):
         
         return results    
     
+    
+    def update_stock(self, pid, stock):
+        cursor = self._conn.cursor()
+        query = ("UPDATE product SET stock=%s WHERE ProductId=%s")
+        cursor.execute(query, stock, pid)
+        
+        cursor.close()
+        
+        return True
+        
     def insert_new_product(self, stock, name, description, price, category, publisher):
         cursor = self._conn.cursor()
         

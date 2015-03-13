@@ -3,6 +3,7 @@ import client.states.BaseState
 import client.db.CategoryRepository
 import client.db.PublisherRepository
 import client.db.ProductRepository
+import traceback
 
 class AdminMenuState(client.states.BaseState.BaseState):
     
@@ -14,6 +15,7 @@ class AdminMenuState(client.states.BaseState.BaseState):
         # Setup our handlers
         self.register_menu_item("Back to main", client.states.StartMenuState.StartMenuState, True)
         self.register_menu_item("Add a new product", self.add_new_product, False)
+        self.register_menu_item("Update stock for product", self.update_product_stock, False)
     
     
     """
@@ -37,6 +39,31 @@ class AdminMenuState(client.states.BaseState.BaseState):
             lid = repo.insert_new_product(init_stock, init_name, init_description, init_price, init_category_id, init_publisher_id)
         
         print("Product has been added with no problems. ID: {}".format(lid))
+
+    def update_product_stock(self):
+        
+        try:
+            prod_id = self._get_product_id()
+            
+            # Ask for the new stock
+            new_stock = int(input("What is the new stock value?  "))
+            
+            with client.db.ProductRepository.ProductRepository() as repo:
+                repo.update_stock(prod_id, new_stock)                
+            print("The amount of stock for the product has been updated") 
+                       
+        except Exception as e:
+            print(str(e))
+            print("A provided value was invalid.")
+        
+    def _get_product_id(self):
+        with client.db.ProductRepository.ProductRepository() as repo:
+            products = repo.get_all_products()
+            
+            for(pid, stock, name) in products:
+                print("{}) {} (Remaining: {})".format(pid, name, stock))
+            
+        return int(input("Please enter a product ID: "))
 
     def _get_category_id(self):
         
