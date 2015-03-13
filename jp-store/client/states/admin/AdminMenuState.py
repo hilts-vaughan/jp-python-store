@@ -2,6 +2,7 @@ import client.states.StartMenuState
 import client.states.BaseState
 import client.db.CategoryRepository
 import client.db.PublisherRepository
+import client.db.ProductRepository
 
 class AdminMenuState(client.states.BaseState.BaseState):
     
@@ -25,13 +26,17 @@ class AdminMenuState(client.states.BaseState.BaseState):
             init_stock = int(input("Please enter the initial stock: "))
             init_name = input("Please enter the initial name: ")
             init_description = input("Please enter the initial description: ")
-            init_price = float(input("Please enter the initial price"))
+            init_price = float(input("Please enter the initial price: "))
             init_category_id = self._get_category_id()
             init_publisher_id = self._get_publisher_id()            
         except ValueError:
             print("A value provided was invalid. Aborting product creation")
         
-        print("Is that all?")
+        # Pass the information to a new repo and 
+        with client.db.ProductRepository.ProductRepository() as repo:
+            lid = repo.insert_new_product(init_stock, init_name, init_description, init_price, init_category_id, init_publisher_id)
+        
+        print("Product has been added with no problems. ID: {}".format(lid))
 
     def _get_category_id(self):
         
