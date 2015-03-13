@@ -1,6 +1,7 @@
 import client.states.BaseState
 import client.states.StartMenuState
 import client.db.CustomerRepository
+import client.db.OrderRepository
 
 class CustomerMenuState(client.states.BaseState.BaseState):
     
@@ -11,6 +12,8 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         
         # Setup our handlers
         self.register_menu_item("Back to main", client.states.StartMenuState.StartMenuState, True)
+        self.register_menu_item("View my orders", self.view_my_orders, False)
+        #self.register_menu_item("Update my account profile", self.update_profile, transition)
         
         with client.db.CustomerRepository.CustomerRepository() as repo:
             results = repo.get_all_customers()
@@ -31,6 +34,33 @@ class CustomerMenuState(client.states.BaseState.BaseState):
             self._customer = results[choice - 1]
         
         print("This user is now authenticated. All actions in this menu will be performed as this user.")
+    
+    
+    """
+        Given the currently authenticated users, displays their orders
+    """
+    def view_my_orders(self):
+        
+        
+        with client.db.OrderRepository.OrderRepository() as repo:
+            # Fetch my orders
+            orders = repo.get_orders_for(self._customer[0])
+        
+            if len(orders) > 0:
+                current_order_no = -1
+                for (order_number, quantity, pid) in orders:
+                    
+                    # Print new heading if needed
+                    if order_number is not current_order_no:
+                        print("Order #{}".format(order_number))
+                        current_order_no = order_number
+                    
+                    print("    Product #{}, ordered x{}".format(pid, quantity))
+        
+        return
+    
+    def update_profile(self):
+        return
     
     
     """
