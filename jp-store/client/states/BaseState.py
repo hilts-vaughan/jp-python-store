@@ -36,6 +36,9 @@ class BaseState:
         else:
             # Otherwise, execute the function in the current context
             menu_item.action()
+            
+            # Redraw, since we didn't transition away
+            self.draw()
     
     """
         Draws the current state of the given state to the standard I/O stream
