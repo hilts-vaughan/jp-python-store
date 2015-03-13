@@ -13,7 +13,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         # Setup our handlers
         self.register_menu_item("Back to main", client.states.StartMenuState.StartMenuState, True)
         self.register_menu_item("View my orders", self.view_my_orders, False)
-        #self.register_menu_item("Update my account profile", self.update_profile, transition)
+        self.register_menu_item("Update my account profile", self.update_profile, False)
         
         with client.db.CustomerRepository.CustomerRepository() as repo:
             results = repo.get_all_customers()
@@ -59,7 +59,35 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         
         return
     
+    """
+        Allows the user the ability to update a user conditionally; information about themselves
+    """
     def update_profile(self):
+        print("Note: All fields will be prompted. Leave the fields blank that you don't want to change.\n")
+        
+        with client.db.CustomerRepository.CustomerRepository() as repo:
+            
+            old_customer_data = repo.get_customer_by_id(self._customer[0])
+            print(old_customer_data)        
+        
+            f_name = input("Please enter your FIRST name: ")
+            l_name = input("Please enter your LAST name: ")
+            addr = input("Please enter your address: ")
+            phone = input("Please enter your phone number: ")        
+            
+            # Check for updates... something smells here but I don't know how to fix it off the top of my head
+            if not f_name:
+                f_name = old_customer_data[1]
+            if not l_name:
+                l_name = old_customer_data[2]
+            if not addr:
+                addr = old_customer_data[3]
+            if not phone:
+                phone = old_customer_data[4]
+            
+            # Send an update to the DB
+            repo.update_customer_by_id(old_customer_data[0], f_name, l_name, addr, phone)
+        
         return
     
     
@@ -73,7 +101,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         
         f_name = input("Please enter your FIRST name: ")
         l_name = input("Please enter your LAST name: ")
-        addr = input("Please enter your addresss: ")
+        addr = input("Please enter your address: ")
         phone = input("Please enter your phone number: ")
         
         print("Great! Generating user...")

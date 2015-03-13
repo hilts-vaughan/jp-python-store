@@ -12,6 +12,31 @@ class CustomerRepository(client.db.Repository.Repository):
         super().__init__()
     
     
+    """
+        Given a customer ID, returns the row containing all their information
+    """    
+    def get_customer_by_id(self, cid):
+        cursor = self._conn.cursor()
+        
+        query = ("SELECT * FROM customeraccount WHERE CustomerId={}".format(cid))
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        cursor.close()
+    
+        return results[0]
+    
+    def update_customer_by_id(self, cid, f_name, l_name, addr, phone):
+        
+        cursor = self._conn.cursor()
+        
+        query = ("UPDATE customeraccount SET FirstName='{}', LastName='{}', MailingAddress='{}', PhoneNumber='{}' WHERE CustomerId={}".format(f_name, l_name, addr, phone, cid))
+        cursor.execute(query)
+        
+        cursor.close()
+    
+        return
+    
     def create_new_customer(self, f_name, l_name, addr, phone):
         cursor = self._conn.cursor()
         
