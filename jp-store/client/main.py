@@ -8,6 +8,5 @@ context.set_state(client.states.StartMenuState.StartMenuState())
 
 # While forever, for now
 while True:
-    
     user_command = input("Choice: ")
     context.handle_request(user_command)

@@ -16,6 +16,7 @@ class AdminMenuState(client.states.BaseState.BaseState):
         self.register_menu_item("Back to main", client.states.StartMenuState.StartMenuState, True)
         self.register_menu_item("Add a new product", self.add_new_product, False)
         self.register_menu_item("Update stock for product", self.update_product_stock, False)
+        self.register_menu_item("Increment stock for product", self.incerment_product_stock, False)
     
     
     """
@@ -50,6 +51,22 @@ class AdminMenuState(client.states.BaseState.BaseState):
             
             with client.db.ProductRepository.ProductRepository() as repo:
                 repo.update_stock(prod_id, new_stock)                
+            print("The amount of stock for the product has been updated") 
+                       
+        except Exception as e:
+            print(str(e))
+            print("A provided value was invalid.")
+    #untested
+    def incerment_product_stock(self):
+        
+        try:
+            prod_id = self._get_product_id()
+            
+            # Ask for the new stock
+            new_stock = int(input("What is the increment?  "))
+            
+            with client.db.ProductRepository.ProductRepository() as repo:
+                repo.increment_stock(prod_id, new_stock)                
             print("The amount of stock for the product has been updated") 
                        
         except Exception as e:

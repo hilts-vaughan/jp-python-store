@@ -27,14 +27,35 @@ class ProductRepository(client.db.Repository.Repository):
     
     def update_stock(self, pid, stock):
         cursor = self._conn.cursor()
-        print("Updating stock against {} ID and new stock of {}".format(pid, stock))    
+        #print("Updating stock against {} ID and new stock of {}".format(pid, stock))    
         query = ("UPDATE product SET Stock=%s WHERE ProductId=%s")
         cursor.execute(query, (stock, pid))
         
         cursor.close()
         
         return True
+    """
+    def increment_stock(self, pid, stock):
+        cursor = self._conn.cursor()
+        #print("Updating stock against {} ID and new stock of {}".format(pid, stock))    
+        query = ("UPDATE product SET Stock=Stock + {} WHERE ProductId={}".format(stock,pid))
+        cursor.execute(query)
         
+        cursor.close()
+        
+        return True
+        
+    """
+    def increment_stock(self, pid, stock):
+        cursor = self._conn.cursor()
+        #print("Updating stock against {} ID and new stock of {}".format(pid, stock))    
+        query = ("UPDATE product SET Stock=Stock + %s WHERE ProductId=%s")
+        cursor.execute(query,(stock,pid))
+        
+        cursor.close()
+        
+        return True    
+    
     def insert_new_product(self, stock, name, description, price, category, publisher):
         cursor = self._conn.cursor()
         
