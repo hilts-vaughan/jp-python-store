@@ -27,8 +27,9 @@ class ProductRepository(client.db.Repository.Repository):
     
     def update_stock(self, pid, stock):
         cursor = self._conn.cursor()
-        query = ("UPDATE product SET stock=%s WHERE ProductId=%s")
-        cursor.execute(query, stock, pid)
+        print("Updating stock against {} ID and new stock of {}".format(pid, stock))    
+        query = ("UPDATE product SET Stock=%s WHERE ProductId=%s")
+        cursor.execute(query, (stock, pid))
         
         cursor.close()
         
