@@ -67,3 +67,17 @@ class ProductRepository(client.db.Repository.Repository):
         cursor.close()
         
         return lid
+    def edit_media(self,pid, name, description, price, category, publisher):
+        cursor = self._conn.cursor()
+        query = ("UPDATE product SET name=%s WHERE ProductId=%s")
+        cursor.execute(query, (name,pid))
+        query = ("UPDATE product SET description=%s WHERE ProductId=%s")
+        cursor.execute(query, (description,pid))
+        query = ("UPDATE product SET price=%s WHERE ProductId=%s")
+        cursor.execute(query, (price,pid))
+        query = ("UPDATE product SET Category_CategoryId=%s WHERE ProductId=%s")
+        cursor.execute(query, (category,pid))
+        query = ("UPDATE product SET Publisher_PublisherId=%s WHERE ProductId=%s")        
+        cursor.execute(query, (publisher,pid))
+        cursor.close()
+        

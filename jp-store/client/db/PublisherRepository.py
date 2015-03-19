@@ -23,4 +23,8 @@ class PublisherRepository(client.db.Repository.Repository):
         cursor.close()
         
         return results    
-            
+    def edit_publisher(self,pid,name):
+        cursor = self._conn.cursor()
+        query = ("UPDATE publisher SET Name=%s WHERE PublisherId=%s")
+        cursor.execute(query, (name,pid))
+        cursor.close()
