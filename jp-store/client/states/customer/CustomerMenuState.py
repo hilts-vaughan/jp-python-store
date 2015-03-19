@@ -14,6 +14,9 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         self.register_menu_item("Back to main", client.states.StartMenuState.StartMenuState, True)
         self.register_menu_item("View my orders", self.view_my_orders, False)
         self.register_menu_item("Update my account profile", self.update_profile, False)
+        self.register_menu_item("check stock", self.check_stock, False)
+        self.register_menu_item("purchase item", self.purchase, False)
+        self.register_menu_item("Search", self.search, False)
         
         with client.db.CustomerRepository.CustomerRepository() as repo:
             results = repo.get_all_customers()
@@ -113,3 +116,13 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         
         return (lid, f_name, l_name, addr, phone)
             
+    def check_stock(self):
+
+        return True
+    def purchase(self):
+        
+        return True
+    def search(self):
+        
+        return True
+    

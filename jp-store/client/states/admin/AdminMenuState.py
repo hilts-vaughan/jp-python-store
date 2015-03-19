@@ -81,29 +81,61 @@ class AdminMenuState(client.states.BaseState.BaseState):
     '''    
     def edit_supplier(self):
         try:
-            sup_id = self._get_supplier_id()
-            new_address = (input("What is the new address?  "))
-            new_country = (input("What is the new country?  "))
-            new_name = (input("What is the new name?  "))
-            new_number = (input("What is the new phoneNumber?  "))
+            sid = self._get_supplier_id()
+
             with client.db.SupplierRepository.SupplierRepository() as repo:
-                repo.edit_suppliers(sup_id, new_address,new_country,new_name,new_number)
+                old_supplier = repo.get_supplier_by_id(sid)
+                print(old_supplier)                
+                
+                new_address = (input("What is the new address?  "))
+                new_country = (input("What is the new country?  "))
+                new_name = (input("What is the new name?  "))
+                new_number = (input("What is the new phoneNumber?  "))
+                
+                # Check for updates... something smells here but I don't know how to fix it off the top of my head
+                if not new_address:
+                    new_address = old_supplier[1]
+                if not new_country:
+                    new_country = old_supplier[2]
+                if not new_name:
+                    new_name = old_supplier[3]
+                if not new_number:
+                    new_number = old_supplier[4]
+            
+            # Send an update to the DB
+                repo.edit_suppliers(old_supplier[0], new_address, new_country, new_name, new_number)
             print("The supplier has been updated") 
+        
+            
         except Exception as e:
             print(str(e))
             print("A provided value was invalid.")
 
     def edit_media(self):
         try:
-            prod_id = self._get_product_id()
-            new_name = (input("What is the new name?  "))
-            new_description = (input("What is the new description?  "))
-            new_price = (input("What is the new price?  "))
-            new_category = (input("What is the new category id?  "))
-            new_publisher = (input("What is the new publisher id?  "))
-                        
+            pid = self._get_product_id()
             with client.db.ProductRepository.ProductRepository() as repo:
-                repo.edit_media(prod_id, new_name,new_description,new_price,new_category,new_publisher)
+                old_media = repo.get_product_by_id(pid)
+                print(old_media)                
+                
+                new_name = (input("What is the new name?  "))
+                new_description = (input("What is the new description?  "))
+                new_price = (input("What is the new price?  "))
+                new_category = (input("What is the new category id?  "))
+                new_publisher = (input("What is the new publisher id?  "))
+                if not new_name:
+                    new_name = old_media[2]
+                if not new_description:
+                    new_description = old_media[3]
+                if not new_price:
+                    new_price = old_media[4]
+                if not new_category:
+                    new_category = old_media[5]
+                if not new_publisher:
+                    new_publisher = old_media[6]
+
+            with client.db.ProductRepository.ProductRepository() as repo:
+                repo.edit_media(pid, new_name,new_description,new_price,new_category,new_publisher)
             print("The product has been updated")
         
         except Exception as e:
@@ -166,6 +198,6 @@ class AdminMenuState(client.states.BaseState.BaseState):
         for(sid,address,country, name,phonenumber) in suppliers:
             print("{}) {} {} {} {} ".format(sid,address,country, name,phonenumber))
         
-        publisher_id = int(input("Please enter a Supplier ID from the above list: "))
+        sup_id = int(input("Please enter a Supplier ID from the above list: "))
         
-        return publisher_id
+        return sup_id

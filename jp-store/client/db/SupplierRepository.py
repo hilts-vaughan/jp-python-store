@@ -24,14 +24,20 @@ class SupplierRepository(client.db.Repository.Repository):
         cursor.close()
         
         return results
+    
+    def get_supplier_by_id(self, sid):
+        cursor = self._conn.cursor()
+        
+        query = ("SELECT * FROM supplier WHERE SupplierId={}".format(sid))
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        cursor.close()
+    
+        return results[0]
+    
     def edit_suppliers(self,sid,address,country,name,phone):
         cursor = self._conn.cursor()
-        query = ("UPDATE supplier SET Address=%s WHERE SupplierId=%s")
-        cursor.execute(query, (address,sid))
-        query = ("UPDATE supplier SET Name=%s WHERE SupplierId=%s")
-        cursor.execute(query, (name,sid))
-        query = ("UPDATE supplier SET Country=%s WHERE SupplierId=%s")
-        cursor.execute(query, (country,sid))
-        query = ("UPDATE supplier SET PhoneNumber=%s WHERE SupplierId=%s")
-        cursor.execute(query, (phone,sid))
+        query = ("UPDATE supplier SET Address=%s,Name=%s, Country=%s, PhoneNumber=%s WHERE SupplierId=%s")
+        cursor.execute(query, (address,name,country,phone,sid))
         cursor.close()

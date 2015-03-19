@@ -69,15 +69,18 @@ class ProductRepository(client.db.Repository.Repository):
         return lid
     def edit_media(self,pid, name, description, price, category, publisher):
         cursor = self._conn.cursor()
-        query = ("UPDATE product SET name=%s WHERE ProductId=%s")
-        cursor.execute(query, (name,pid))
-        query = ("UPDATE product SET description=%s WHERE ProductId=%s")
-        cursor.execute(query, (description,pid))
-        query = ("UPDATE product SET price=%s WHERE ProductId=%s")
-        cursor.execute(query, (price,pid))
-        query = ("UPDATE product SET Category_CategoryId=%s WHERE ProductId=%s")
-        cursor.execute(query, (category,pid))
-        query = ("UPDATE product SET Publisher_PublisherId=%s WHERE ProductId=%s")        
-        cursor.execute(query, (publisher,pid))
+        query = ("UPDATE product SET name=%s, description=%s, price=%s, Category_CategoryId=%s, Publisher_PublisherId=%s WHERE ProductId=%s")
+        cursor.execute(query, (name,description,price,category,publisher,pid))
         cursor.close()
         
+    def get_product_by_id(self, pid):
+        cursor = self._conn.cursor()
+        
+        query = ("SELECT * FROM product WHERE ProductId={}".format(pid))
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        cursor.close()
+    
+        return results[0]
+    
