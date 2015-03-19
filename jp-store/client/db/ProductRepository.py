@@ -23,8 +23,26 @@ class ProductRepository(client.db.Repository.Repository):
         cursor.close()
         
         return results    
+    def get_all_products_cust(self):
+                    
+        cursor = self._conn.cursor()            
+        query = ("SELECT ProductId, Name, Price FROM product;")
+        cursor.execute(query)
+        results = cursor.fetchall()
+        # Clean up the cursor
+        cursor.close()
+        
+        return results 
     
-    
+    def get_stock_by_pid(self,pid):
+        cursor = self._conn.cursor()            
+        query = ("SELECT Stock, Name FROM product WHERE ProductId={}".format(pid))
+        cursor.execute(query)
+        results = cursor.fetchall()
+        # Clean up the cursor
+        cursor.close()
+        
+        return results
     def update_stock(self, pid, stock):
         cursor = self._conn.cursor()
         #print("Updating stock against {} ID and new stock of {}".format(pid, stock))    

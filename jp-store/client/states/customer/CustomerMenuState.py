@@ -117,7 +117,10 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         return (lid, f_name, l_name, addr, phone)
             
     def check_stock(self):
-
+        pid=self._get_product_id()
+        with client.db.ProductRepository.ProductRepository() as repo:
+            product=repo.get_stock_by_pid(pid)
+            print("{} {} are in stock".format(product[0][0], product[0][1]))
         return True
     def purchase(self):
         
@@ -126,3 +129,11 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         
         return True
     
+    def _get_product_id(self):
+        with client.db.ProductRepository.ProductRepository() as repo:
+            products = repo.get_all_products_cust()
+            
+            for(pid, name,price) in products:
+                print("{}) {} (Costs: {})".format(pid, name,price))
+            
+        return int(input("Please enter a product ID: "))

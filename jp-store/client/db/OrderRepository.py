@@ -27,6 +27,16 @@ class OrderRepository(client.db.Repository.Repository):
         
         return results
 
-
+    def create_new_order(self, f_name, l_name, addr, phone):
+        cursor = self._conn.cursor()
+        
+        query = ("INSERT INTO customeraccount VALUES(NULL, %s, %s, %s, %s)")
+        params = (f_name, l_name, addr, phone)        
+        cursor.execute(query, params)
+        lid = cursor.lastrowid
+        
+        cursor.close()
+        
+        return lid
     
             
