@@ -33,6 +33,16 @@ class ProductRepository(client.db.Repository.Repository):
         cursor.close()
         
         return results 
+    def get_all_products_key(self,start):
+                    
+        cursor = self._conn.cursor()            
+        query = ("SELECT ProductId, Name, Price FROM product WHERE Name LIKE '{}%'".format(start))
+        cursor.execute(query)
+        results = cursor.fetchall()
+        # Clean up the cursor
+        cursor.close()
+        return results 
+    
     
     def get_stock_by_pid(self,pid):
         cursor = self._conn.cursor()            

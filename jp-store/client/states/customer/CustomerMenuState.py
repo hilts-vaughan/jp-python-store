@@ -126,7 +126,12 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         
         return True
     def search(self):
-        
+        product_start=input("enter the starting characters of the item you want")
+        with client.db.ProductRepository.ProductRepository() as repo:
+            products = repo.get_all_products_key(product_start)
+            for(pid, name,price) in products:
+                print("{}) {} (Costs: {})".format(pid, name,price))
+
         return True
     
     def _get_product_id(self):
