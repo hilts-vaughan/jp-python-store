@@ -2,6 +2,7 @@ import client.states.BaseState
 import client.states.StartMenuState
 import client.db.CustomerRepository
 import client.db.OrderRepository
+import client.db.CartRepository
 
 class CustomerMenuState(client.states.BaseState.BaseState):
     
@@ -17,6 +18,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         self.register_menu_item("check stock", self.check_stock, False)
         self.register_menu_item("purchase item", self.purchase, False)
         self.register_menu_item("Search", self.search, False)
+        self.register_menu_item("Add to Cart", self.add_cart, False)
         
         with client.db.CustomerRepository.CustomerRepository() as repo:
             results = repo.get_all_customers()
@@ -120,11 +122,20 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         pid=self._get_product_id()
         with client.db.ProductRepository.ProductRepository() as repo:
             product=repo.get_stock_by_pid(pid)
-            print("{} {} are in stock".format(product[0][0], product[0][1]))
+            print("{} {} are in stock".format(product[0], product[1]))
         return True
+
+    def add_cart(self):
+        pid=self._get_product_id()
+        amount=input("how many of that would you like? ")
+        with client.db.CartRepository.CartRepository() as repo:
+            repo.create_new_cart_item(amount,self._customer[0],pid)
+             
     def purchase(self):
-        
+        with client.db.CartRepository.CartRepository() as repo:
+            repo.checkout(self._customer[0])
         return True
+    
     def search(self):
         product_start=input("enter the starting characters of the item you want")
         with client.db.ProductRepository.ProductRepository() as repo:

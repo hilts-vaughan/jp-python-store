@@ -25,6 +25,17 @@ class CustomerRepository(client.db.Repository.Repository):
         cursor.close()
     
         return results[0]
+
+    def get_customer_address_by_id(self, cid):
+        cursor = self._conn.cursor()
+        
+        query = ("SELECT MailingAddress FROM customeraccount WHERE CustomerId={}".format(cid))
+        cursor.execute(query)
+        results = cursor.fetchone()
+        
+        cursor.close()
+    
+        return results[0]
     
     def update_customer_by_id(self, cid, f_name, l_name, addr, phone):
         

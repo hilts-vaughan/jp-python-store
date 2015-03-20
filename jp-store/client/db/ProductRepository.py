@@ -52,7 +52,7 @@ class ProductRepository(client.db.Repository.Repository):
         # Clean up the cursor
         cursor.close()
         
-        return results
+        return results[0]
     def update_stock(self, pid, stock):
         cursor = self._conn.cursor()
         #print("Updating stock against {} ID and new stock of {}".format(pid, stock))    
@@ -108,7 +108,6 @@ class ProductRepository(client.db.Repository.Repository):
         cursor.execute(query)
         results = cursor.fetchall()
         
-        cursor.close()
-    
+        cursor.close()    
         return results[0]
     
