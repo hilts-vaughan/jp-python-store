@@ -21,7 +21,8 @@ class CartRepository(client.db.Repository.Repository):
     def get_cart_for(self, cid):
                     
         cursor = self._conn.cursor()            
-        query = ("SELECT CartItemID, Amount, Product_ProductId,  FROM cartItem WHERE CustomerAccount_CustomerId={} ORDER BY OrderNumber;".format(cid))
+        query = ("SELECT * FROM cartitem WHERE CustomerAccount_CustomerId={}".format(cid))
+        
         cursor.execute(query)
         results = cursor.fetchall()        
         # Clean up the cursor
@@ -38,21 +39,18 @@ class CartRepository(client.db.Repository.Repository):
     def checkout(self, cid):
         #make an order and get its ID
         with client.db.CustomerRepository.CustomerRepository() as repo:
-                customerAddress = repo.get_customer_address_by_id()
+                customerAddress = repo.get_customer_address_by_id(cid)
         #make an order
         with client.db.OrderRepository.OrderRepository() as repo:
-                ordernum = repo.make_order(customerAddress,time.strftime("%d/%m/%Y"),NULL,NULL,cid)
+                ordernum = repo.create_new_order(customerAddress,time.strftime("%d/%m/%Y"),NULL,NULL,cid)
         
         #get the items to push up        
-        cursor = self._conn.cursor()
-        query = ("SELECT CartItemID, Amount, Product_ProductId,  FROM cartitem WHERE CustomerAccount_CustomerId={}".format(cid))
-        cursor.execute(query)
-        results = cursor.fetchall()
-        cursor.close()
+        with client.db.CartRepository.CartRepository() as repo:
+            results=repo.get_cart_for(cid)
         #populate orders from cart items
-        for(amount, pid) in results:
+        for(thing,amount, pid,other) in results:
             # Clean up the cursor
-            with client.db.OrderRepository.OrderRepository() as repo:
+            with client.db.OrderItemRepository.OrderItemRepository() as repo:
                 repo.make_order_item(ordernum, amount, pid)
         return
     def emptyCart(self,cid):

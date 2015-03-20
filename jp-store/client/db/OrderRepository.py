@@ -29,8 +29,8 @@ class OrderRepository(client.db.Repository.Repository):
 
     def create_new_order(self, address, dateCreated, dateEstimated, dateDelivered,cid):
         cursor = self._conn.cursor()
+        query = ("INSERT INTO `order` VALUES(NULL, %s, %s, %s, %s, %s)")
         
-        query = ("INSERT INTO order VALUES(NULL, %s, %s, %s, %s, %s)")
         params = (address, dateCreated, dateEstimated, dateDelivered,cid)        
         cursor.execute(query, params)
         lid = cursor.lastrowid
