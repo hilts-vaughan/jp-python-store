@@ -3,6 +3,7 @@ import client.states.StartMenuState
 import client.db.CustomerRepository
 import client.db.OrderRepository
 import client.db.CartRepository
+import client.db.OrderItemRepository
 
 class CustomerMenuState(client.states.BaseState.BaseState):
     

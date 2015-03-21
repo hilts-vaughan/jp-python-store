@@ -19,7 +19,15 @@ class OrderItemRepository(client.db.Repository.Repository):
         lid = cursor.lastrowid
         cursor.close()
         return lid
-    def make_orders_from_cart(self,cartStuff):
+    def make_orders_from_cart(self,cartStuff,ordernum):
+        for(thing,amount, pid,other) in cartStuff:
+            cursor = self._conn.cursor()
+            query = ("INSERT INTO orderitem VALUES(NULL, %s, %s, %s)")
+            params = (amount, pid,ordernum)        
+            cursor.execute(query, params)
+            cursor.close()
+        return 
+        
         return
     def hey(self):
         print("hey")

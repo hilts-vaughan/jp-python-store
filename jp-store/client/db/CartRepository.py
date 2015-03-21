@@ -39,18 +39,17 @@ class CartRepository(client.db.Repository.Repository):
     def checkout(self, cid):
         #make an order and get its ID
         with client.db.CustomerRepository.CustomerRepository() as repo:
-                customerAddress = repo.get_customer_address_by_id(cid)
+            customerAddress = repo.get_customer_address_by_id(cid)
         #make an order
         with client.db.OrderRepository.OrderRepository() as repo:
-                ordernum = repo.create_new_order(customerAddress,time.strftime("%d/%m/%Y"),NULL,NULL,cid)
+            ordernum = repo.create_new_order(customerAddress,time.strftime("%d/%m/%Y"),NULL,NULL,cid)
         
         #get the items to push up        
         with client.db.CartRepository.CartRepository() as repo:
-                results=repo.get_cart_for(cid)
+            results=repo.get_cart_for(cid)
         #populate orders from cart items
-        
         with client.db.OrderItemRepository.OrderItemRepository() as repo:
-                repo.hey(results)
+            repo.make_orders_from_cart(results,ordernum)
         #for(thing,amount, pid,other) in results:
             # Clean up the cursor
         #   with client.db.OrderItemRepository.OrderItemRepository() as repo:

@@ -110,4 +110,5 @@ class ProductRepository(client.db.Repository.Repository):
         
         cursor.close()    
         return results[0]
-    
+    def hey(self):
+        print("FLUB")
