@@ -57,8 +57,7 @@ class CartRepository(client.db.Repository.Repository):
         return
     def emptyCart(self,cid):
         cursor = self._conn.cursor()            
-        query = (" DELETE * FROM cartitem WHERE CustomerAccount_CustomerId = {}".format(cid))
-        
+        query = (" DELETE FROM cartitem WHERE CustomerAccount_CustomerId = {}".format(cid))
         cursor.execute(query)
         # Clean up the cursor
         cursor.close()
