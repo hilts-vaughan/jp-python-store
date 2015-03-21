@@ -56,5 +56,4 @@ class BaseState:
     def register_menu_item(self, text, option, transition):
         text = str(self.free_menu_id) + ") " + text
         self.menu_items.append(MenuItem(text, option, transition))
-        print("Adding item")
         self.free_menu_id = self.free_menu_id + 1

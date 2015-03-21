@@ -56,5 +56,9 @@ class CartRepository(client.db.Repository.Repository):
         #      repo.make_order_item(ordernum, amount, pid)
         return
     def emptyCart(self,cid):
-        return
+        cursor = self._conn.cursor()            
+        query = (" DELETE * FROM cartitem WHERE CustomerAccount_CustomerId = {}".format(cid))
         
+        cursor.execute(query)
+        # Clean up the cursor
+        cursor.close()

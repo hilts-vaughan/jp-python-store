@@ -20,7 +20,8 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         self.register_menu_item("purchase item", self.purchase, False)
         self.register_menu_item("Search", self.search, False)
         self.register_menu_item("Add to Cart", self.add_cart, False)
-        
+        self.register_menu_item("See cart", self.check_cart, False)
+        self.register_menu_item("Clear cart", self.clear_cart, False)
         with client.db.CustomerRepository.CustomerRepository() as repo:
             results = repo.get_all_customers()
             
@@ -154,3 +155,13 @@ class CustomerMenuState(client.states.BaseState.BaseState):
                 print("{}) {} (Costs: {})".format(pid, name,price))
             
         return int(input("Please enter a product ID: "))
+    def check_cart(self):
+        with client.db.CartRepository.CartRepository() as repo:
+            result=repo.get_cart_for(self._customer[0])
+        print("Cart contains")
+        for (cartItem,amount,cid,pid) in result:
+            print("You have ordered {} of item {}".format(amount,pid))
+    def clear_cart(self):
+        with client.db.CartRepository.CartRepository() as repo:
+            result=repo.emptyCart(self._customer[0])
+        
