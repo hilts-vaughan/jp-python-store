@@ -1,7 +1,7 @@
 '''
-Created on Mar 19, 2015
+Created on Mar 20, 2015
 
-@author: Brandon Smith
+@author: Brandon
 '''
 import client.db.Repository
 
@@ -19,3 +19,9 @@ class OrderItemRepository(client.db.Repository.Repository):
         lid = cursor.lastrowid
         cursor.close()
         return lid
+    def make_orders_from_cart(self,cartStuff):
+        return
+    def hey(self):
+        print("hey")
+        return
+    

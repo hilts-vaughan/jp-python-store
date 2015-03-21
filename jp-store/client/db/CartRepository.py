@@ -46,12 +46,15 @@ class CartRepository(client.db.Repository.Repository):
         
         #get the items to push up        
         with client.db.CartRepository.CartRepository() as repo:
-            results=repo.get_cart_for(cid)
+                results=repo.get_cart_for(cid)
         #populate orders from cart items
-        for(thing,amount, pid,other) in results:
+        
+        with client.db.OrderItemRepository.OrderItemRepository() as repo:
+                repo.hey(results)
+        #for(thing,amount, pid,other) in results:
             # Clean up the cursor
-            with client.db.OrderItemRepository.OrderItemRepository() as repo:
-                repo.make_order_item(ordernum, amount, pid)
+        #   with client.db.OrderItemRepository.OrderItemRepository() as repo:
+        #      repo.make_order_item(ordernum, amount, pid)
         return
     def emptyCart(self,cid):
         return
