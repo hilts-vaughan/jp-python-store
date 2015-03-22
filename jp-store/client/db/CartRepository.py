@@ -28,6 +28,16 @@ class CartRepository(client.db.Repository.Repository):
         # Clean up the cursor
         cursor.close()
         return results
+    def get_cart_items_for_orders(self,cid):
+        #returns only the amount and the pid
+        cursor = self._conn.cursor()            
+        query = ("SELECT Amount,Product_ProductId FROM cartitem WHERE CustomerAccount_CustomerId={}".format(cid))
+        cursor.execute(query)
+        results = cursor.fetchall()        
+        # Clean up the cursor
+        cursor.close()
+        return results
+        
     def create_new_cart_item(self,amount,cid,pid):
         #makes a new cart item
         cursor = self._conn.cursor()  
@@ -48,7 +58,7 @@ class CartRepository(client.db.Repository.Repository):
         
         #get the cart for a person        
         with client.db.CartRepository.CartRepository() as repo:
-            results=repo.get_cart_for(cid)
+            results=repo.get_cart_items_for_orders(cid)
         #Create the order items
         with client.db.OrderItemRepository.OrderItemRepository() as repo:
             repo.make_orders_from_cart(results,ordernum)

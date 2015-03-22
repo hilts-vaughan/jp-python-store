@@ -23,7 +23,7 @@ class OrderItemRepository(client.db.Repository.Repository):
     def make_orders_from_cart(self,cartStuff,ordernum):
         #taking a customers cart (takes all information) 
         #generates an order item for each of them
-        for(thing,amount, pid,other) in cartStuff:
+        for(amount, pid) in cartStuff:
             cursor = self._conn.cursor()
             query = ("INSERT INTO orderitem VALUES(NULL, %s, %s, %s)")
             params = (amount, pid,ordernum)        
