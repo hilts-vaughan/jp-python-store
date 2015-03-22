@@ -23,7 +23,7 @@ class AdminMenuState(client.states.BaseState.BaseState):
         #allows call to change the suppliers info
         self.register_menu_item("Edit Supplier", self.edit_supplier, False)
         #Allows call to change a products details
-        self.register_menu_item("Edit Media", self.edit_media, False)
+        self.register_menu_item("Edit A Product", self.edit_product, False)
         #allows call to change a publishers details
         self.register_menu_item("Edit Publisher", self.edit_publisher, False)
     
@@ -91,6 +91,7 @@ class AdminMenuState(client.states.BaseState.BaseState):
                 old_supplier = repo.get_supplier_by_id(sid)
                 print(old_supplier)                
                 #get the new information from the user
+                print("Leaving a feild blank will prevent it from being edited ")
                 new_address = (input("What is the new address?  "))
                 new_country = (input("What is the new country?  "))
                 new_name = (input("What is the new name?  "))
@@ -115,7 +116,7 @@ class AdminMenuState(client.states.BaseState.BaseState):
             print(str(e))
             print("A provided value was invalid.")
 
-    def edit_media(self):
+    def edit_product(self):
         try:
             pid = self._get_product_id()
             with client.db.ProductRepository.ProductRepository() as repo:
@@ -123,6 +124,8 @@ class AdminMenuState(client.states.BaseState.BaseState):
                 old_media = repo.get_product_by_id(pid)
                 print(old_media)                
                 #get the user input
+                print("Leaving a feild blank will prevent it from being edited ")
+
                 new_name = (input("What is the new name?  "))
                 new_description = (input("What is the new description?  "))
                 new_price = (input("What is the new price?  "))
@@ -140,7 +143,7 @@ class AdminMenuState(client.states.BaseState.BaseState):
                 if not new_publisher:
                     new_publisher = old_media[6]
                 #do the update
-                repo.edit_media(pid, new_name,new_description,new_price,new_category,new_publisher)
+                repo.edit_product(pid, new_name,new_description,new_price,new_category,new_publisher)
             print("The product has been updated")
         
         except Exception as e:

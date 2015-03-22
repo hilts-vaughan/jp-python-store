@@ -94,7 +94,7 @@ class ProductRepository(client.db.Repository.Repository):
         cursor.close()
         
         return lid
-    def edit_media(self,pid, name, description, price, category, publisher):
+    def edit_product(self,pid, name, description, price, category, publisher):
         #allows you to change any and all the details of a product except stock which is handled seperately
         cursor = self._conn.cursor()
         query = ("UPDATE product SET name=%s, description=%s, price=%s, Category_CategoryId=%s, Publisher_PublisherId=%s WHERE ProductId=%s")
