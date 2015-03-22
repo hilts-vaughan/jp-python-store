@@ -21,6 +21,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         self.register_menu_item("Add to Cart", self.add_cart, False)
         self.register_menu_item("See Cart", self.check_cart, False)
         self.register_menu_item("Clear Cart", self.clear_cart, False)
+        self.register_menu_item("See full product details", self.show_full_product_info, False)
         
         # Attempt to authenticate a user, show them their options
         with client.db.CustomerRepository.CustomerRepository() as repo:
@@ -199,4 +200,32 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         #empties the users cart
         with client.db.CartRepository.CartRepository() as repo:
             repo.emptyCart(self._customer[0])
+            
+    
+    """
+        Prompts for a product ID and shows the full information available for the product
+    """
+    def show_full_product_info(self):
         
+        # Prompt for an ID
+        pid = self._get_product_id()
+        
+        with client.db.ProductRepository.ProductRepository() as repo:
+            result = repo.get_complete_info_by_pid(pid)
+            
+            # Now display the data in a way that makes sense...
+            print("Displaying product information\n======================================================\n")
+            print("Name:            {}".format(result.product[1]))
+            print("Description:     {}".format(result.product[3]))
+            print("Stock:           {}".format(result.product[2]))
+            print("Price:           ${}".format(result.product[4]))
+            print("Supplier:        {}".format(result.product[5]))
+            
+            print("\nSeries: ")
+            for series in result.series:
+                print("\t" + series[0])
+            
+            print("\nGenres: ")
+            for genre in result.genres:
+                print("\t" + genre[0])
+                

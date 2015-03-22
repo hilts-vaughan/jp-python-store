@@ -4,6 +4,7 @@ Created on Mar 12, 2015
 @author: Vaughan Hilts
 '''
 import client.db.Repository
+import types
 
 """
     A repository connected to a MySQL backend used for fetching: Products
@@ -29,6 +30,65 @@ class ProductRepository(client.db.Repository.Repository):
         cursor.close()
         
         return results    
+    
+    
+    """
+        Given a product ID, 'pid', retrieves the full information for a product available
+    """
+    def get_complete_info_by_pid(self, pid):
+        
+        #Return a list of all products, Name, ID and Stock
+        cursor = self._conn.cursor()            
+        query = ("""SELECT product.ProductId, product.Name As ProductName, Stock, Description, Price, supplier.Name As SupplierName FROM product 
+                LEFT JOIN product_has_supplier ON (product.ProductId = product_has_supplier.Product_ProductId) 
+                LEFT JOIN supplier ON (product_has_supplier.Supplier_SupplierId = supplier.SupplierId)
+                WHERE product.ProductId = {};""".format(pid))
+        
+        
+        cursor.execute(query)
+
+        result = cursor.fetchone()
+                
+        # Clean up the cursor
+        cursor.close()
+
+        
+        # We still need genres and series... so go ahead and get that
+        pgenres = self._get_product_genres(pid)
+        pseries = self._get_product_series(pid)        
+        
+                
+        # Create a dictionary of data
+        product_info = types.SimpleNamespace(product=result, genres = pgenres, series = pseries)
+        
+        return product_info 
+        
+    
+    def _get_product_genres(self, pid):
+
+        cursor = self._conn.cursor()            
+        
+        query = ("SELECT genre.Type As Name FROM product_has_genre INNER JOIN genre ON (genre.Type = product_has_genre.Genre_Type) WHERE Product_ProductId = {};".format(pid))
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        # Clean up the cursor
+        cursor.close()
+        
+        return results
+        
+    def _get_product_series(self, pid):
+        
+        cursor = self._conn.cursor()            
+        
+        query = ("SELECT series.Name As Name FROM series_has_product INNER JOIN series ON (series.SeriesId = series_has_product.Series_SeriesId) WHERE Product_ProductId = {};".format(pid))
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        # Clean up the cursor
+        cursor.close()
+        
+        return results        
     
     """
         Fetches all products from the database with only their ID's, name and price.
