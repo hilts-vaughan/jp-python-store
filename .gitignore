@@ -3,6 +3,7 @@ __pycache__/
 /build/
 /bin/
 target/
+*.pyc
  
 # OS Files #
 .DS_Store
