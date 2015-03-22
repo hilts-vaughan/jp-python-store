@@ -84,7 +84,6 @@ class CustomerMenuState(client.states.BaseState.BaseState):
             addr = input("Please enter your address: ")
             phone = input("Please enter your phone number: ")        
             
-            # Check for updates... something smells here but I don't know how to fix it off the top of my head
             if not f_name:
                 f_name = old_customer_data[1]
             if not l_name:
@@ -145,7 +144,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
     
     def search(self):
         #Searches the database for products that start with a string obtained below
-        product_start=input("enter the starting characters of the item you want")
+        product_start=input("Enter a partial search query to look for in items: ")
         with client.db.ProductRepository.ProductRepository() as repo:
             products = repo.get_all_products_key(product_start)
             for(pid, name,price) in products:
