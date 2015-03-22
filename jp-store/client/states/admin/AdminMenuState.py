@@ -49,6 +49,10 @@ class AdminMenuState(client.states.BaseState.BaseState):
         
         print("Product has been added with no problems. ID: {}".format(lid))
 
+    """
+    Allows the user to change the amount of stock
+    """
+ 
     def update_product_stock(self):
         
         try:
@@ -64,7 +68,11 @@ class AdminMenuState(client.states.BaseState.BaseState):
         except Exception as e:
             print(str(e))
             print("A provided value was invalid.")
-    #untested
+    
+    """
+    allows the user to increment the amount of stock
+    """
+
     def incerment_product_stock(self):
         
         try:
@@ -80,6 +88,10 @@ class AdminMenuState(client.states.BaseState.BaseState):
         except Exception as e:
             print(str(e))
             print("A provided value was invalid.")
+
+    """
+    Allows the admin to edit supplier information
+    """
 
     def edit_supplier(self):
         try:
@@ -115,6 +127,9 @@ class AdminMenuState(client.states.BaseState.BaseState):
         except Exception as e:
             print(str(e))
             print("A provided value was invalid.")
+    """
+    Allows a user to change all the details about a product 
+    """
 
     def edit_product(self):
         try:
@@ -149,7 +164,10 @@ class AdminMenuState(client.states.BaseState.BaseState):
         except Exception as e:
             print(str(e))
             print("A provided value was invalid.")     
-    
+    """
+    Allows the user to change a publishers name
+    """
+
     def edit_publisher(self):
         try:
             #list publishers and recover user input
@@ -163,7 +181,11 @@ class AdminMenuState(client.states.BaseState.BaseState):
         except Exception as e:
             print(str(e))
             print("A provided value was invalid.")     
-        
+    
+    """
+    prints all items in the cart of a customer the number of the items
+    """
+
     def _get_product_id(self):
         #lists out all of the products
         with client.db.ProductRepository.ProductRepository() as repo:
@@ -174,6 +196,10 @@ class AdminMenuState(client.states.BaseState.BaseState):
                 print("{}) {} (Remaining: {})".format(pid, name, stock))
         #get the user input we need
         return int(input("Please enter a product ID: "))
+
+    """
+    Allows the user to select a category from a list
+    """
 
     def _get_category_id(self):
         
@@ -189,6 +215,10 @@ class AdminMenuState(client.states.BaseState.BaseState):
         
         return category_id
 
+    """
+    Prints a readable list of publishers and retrieves an id from the user
+    """
+
     def _get_publisher_id(self):
         
         # Request some category and publisher data by invoking from the repo's
@@ -201,6 +231,10 @@ class AdminMenuState(client.states.BaseState.BaseState):
         publisher_id = int(input("Please enter a publisher ID from the above list: "))
         
         return publisher_id
+
+    """
+    Prints a readable list of suppliers and retrieves an id from the user
+    """
                 
     def _get_supplier_id(self):
         
