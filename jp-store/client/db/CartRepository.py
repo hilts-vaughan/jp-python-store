@@ -19,7 +19,7 @@ class CartRepository(client.db.Repository.Repository):
     """
 
     def get_cart_for(self, cid):
-                    
+        #returns the entier cart for a customer given there id            
         cursor = self._conn.cursor()            
         query = ("SELECT * FROM cartitem WHERE CustomerAccount_CustomerId={}".format(cid))
         
@@ -29,6 +29,7 @@ class CartRepository(client.db.Repository.Repository):
         cursor.close()
         return results
     def create_new_cart_item(self,amount,cid,pid):
+        #makes a new cart item
         cursor = self._conn.cursor()  
         query = ("INSERT INTO cartitem VALUES(NULL, %s, %s, %s)")
         params = (amount, cid, pid)     
@@ -37,25 +38,23 @@ class CartRepository(client.db.Repository.Repository):
         cursor.close()
         
     def checkout(self, cid):
-        #make an order and get its ID
+        #This function takes a user cart and makes orders out of it
+        #It does not clear the cart
         with client.db.CustomerRepository.CustomerRepository() as repo:
             customerAddress = repo.get_customer_address_by_id(cid)
-        #make an order
+        #make an order for the customer given there address
         with client.db.OrderRepository.OrderRepository() as repo:
             ordernum = repo.create_new_order(customerAddress,time.strftime("%d/%m/%Y"),NULL,NULL,cid)
         
-        #get the items to push up        
+        #get the cart for a person        
         with client.db.CartRepository.CartRepository() as repo:
             results=repo.get_cart_for(cid)
-        #populate orders from cart items
+        #Create the order items
         with client.db.OrderItemRepository.OrderItemRepository() as repo:
             repo.make_orders_from_cart(results,ordernum)
-        #for(thing,amount, pid,other) in results:
-            # Clean up the cursor
-        #   with client.db.OrderItemRepository.OrderItemRepository() as repo:
-        #      repo.make_order_item(ordernum, amount, pid)
         return
     def emptyCart(self,cid):
+        #delete everything in a given customers cart
         cursor = self._conn.cursor()            
         query = (" DELETE FROM cartitem WHERE CustomerAccount_CustomerId = {}".format(cid))
         cursor.execute(query)

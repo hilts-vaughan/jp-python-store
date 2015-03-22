@@ -17,7 +17,7 @@ class CustomerRepository(client.db.Repository.Repository):
     """    
     def get_customer_by_id(self, cid):
         cursor = self._conn.cursor()
-        
+        #returns all information about a customer
         query = ("SELECT * FROM customeraccount WHERE CustomerId={}".format(cid))
         cursor.execute(query)
         results = cursor.fetchall()
@@ -27,6 +27,7 @@ class CustomerRepository(client.db.Repository.Repository):
         return results[0]
 
     def get_customer_address_by_id(self, cid):
+        #gets the mailing address for a given customer Used for orders
         cursor = self._conn.cursor()
         
         query = ("SELECT MailingAddress FROM customeraccount WHERE CustomerId={}".format(cid))

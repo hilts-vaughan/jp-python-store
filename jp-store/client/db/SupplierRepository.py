@@ -14,7 +14,7 @@ class SupplierRepository(client.db.Repository.Repository):
     
     
     def get_all_suppliers(self):
-                    
+        #returns all information for the suppliers table
         cursor = self._conn.cursor()            
         query = ("SELECT * FROM supplier;")
         cursor.execute(query)
@@ -26,6 +26,7 @@ class SupplierRepository(client.db.Repository.Repository):
         return results
     
     def get_supplier_by_id(self, sid):
+        #select a particular supplier by there id
         cursor = self._conn.cursor()
         
         query = ("SELECT * FROM supplier WHERE SupplierId={}".format(sid))
@@ -37,6 +38,7 @@ class SupplierRepository(client.db.Repository.Repository):
         return results[0]
     
     def edit_suppliers(self,sid,address,country,name,phone):
+        #Allows you to change all the details of a particular supplier
         cursor = self._conn.cursor()
         query = ("UPDATE supplier SET Address=%s,Name=%s, Country=%s, PhoneNumber=%s WHERE SupplierId=%s")
         cursor.execute(query, (address,name,country,phone,sid))

@@ -13,7 +13,7 @@ class PublisherRepository(client.db.Repository.Repository):
     
     
     def get_all_publishers(self):
-                    
+        #returns a list containing all a publishers data
         cursor = self._conn.cursor()            
         query = ("SELECT * FROM publisher;")
         cursor.execute(query)
@@ -24,6 +24,7 @@ class PublisherRepository(client.db.Repository.Repository):
         
         return results    
     def edit_publisher(self,pid,name):
+        #allows you to change the name of a publisher based on there ID
         cursor = self._conn.cursor()
         query = ("UPDATE publisher SET Name=%s WHERE PublisherId=%s")
         cursor.execute(query, (name,pid))

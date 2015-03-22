@@ -22,6 +22,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         self.register_menu_item("Add to Cart", self.add_cart, False)
         self.register_menu_item("See cart", self.check_cart, False)
         self.register_menu_item("Clear cart", self.clear_cart, False)
+        #when we enter the customer menu they must select a user
         with client.db.CustomerRepository.CustomerRepository() as repo:
             results = repo.get_all_customers()
             
@@ -32,9 +33,9 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         # We will require some state, so let's try and get it here
         print("\nBefore we continue, we will need to authenticate under which user you are. Please select a user to operate as.")
         print("Alternatively, simply type 0 to register a new user.")
-        
+        #pick a user
         choice = int(input("User ID Choice: "))
-        
+        #or make a new one
         if choice is 0:
             self._customer = self.register_new_user()
         else:            
@@ -48,9 +49,10 @@ class CustomerMenuState(client.states.BaseState.BaseState):
     """
     def view_my_orders(self):
         
-        
+        #Check the orders of the active customer        
         with client.db.OrderRepository.OrderRepository() as repo:
             # Fetch my orders
+            # customer[0] is the customer id
             orders = repo.get_orders_for(self._customer[0])
         
             if len(orders) > 0:
@@ -121,47 +123,56 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         return (lid, f_name, l_name, addr, phone)
             
     def check_stock(self):
+        #allows the user to check the stock of a product
         pid=self._get_product_id()
         with client.db.ProductRepository.ProductRepository() as repo:
             product=repo.get_stock_by_pid(pid)
             print("{} {} are in stock".format(product[0], product[1]))
-        return True
-
+        return
     def add_cart(self):
+        #allows the user to add a new item to the cart 
         pid=self._get_product_id()
         amount=input("how many of that would you like? ")
         with client.db.CartRepository.CartRepository() as repo:
             repo.create_new_cart_item(amount,self._customer[0],pid)
-             
+        return
     def purchase(self):
+        #triggers the checkout option from cart repostiory which takes your current cart and makes an order
         with client.db.CartRepository.CartRepository() as repo:
             repo.checkout(self._customer[0])
-        return True
+        #This does not delete your cart
+        return
     
     def search(self):
+        #Searches the database for products that start with a string obtained below
         product_start=input("enter the starting characters of the item you want")
         with client.db.ProductRepository.ProductRepository() as repo:
             products = repo.get_all_products_key(product_start)
             for(pid, name,price) in products:
                 print("{}) {} (Costs: {})".format(pid, name,price))
 
-        return True
+        return
     
     def _get_product_id(self):
+        #Presents a list of useful information to the customer about given products
+        #with the purpose of getting a product id selected by the user
         with client.db.ProductRepository.ProductRepository() as repo:
             products = repo.get_all_products_cust()
-            
+            #prints the list
             for(pid, name,price) in products:
                 print("{}) {} (Costs: {})".format(pid, name,price))
-            
+        #asks the user to select one
         return int(input("Please enter a product ID: "))
     def check_cart(self):
+        #Shows the user what is in there cart
         with client.db.CartRepository.CartRepository() as repo:
             result=repo.get_cart_for(self._customer[0])
         print("Cart contains")
         for (cartItem,amount,cid,pid) in result:
             print("You have ordered {} of item {}".format(amount,pid))
+    
     def clear_cart(self):
+        #empties the users cart
         with client.db.CartRepository.CartRepository() as repo:
-            result=repo.emptyCart(self._customer[0])
+            repo.emptyCart(self._customer[0])
         
