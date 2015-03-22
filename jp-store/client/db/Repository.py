@@ -16,7 +16,9 @@ class Repository():
         self._close()
 
     
-    # Close the connection to be used
+    """
+        Closes the connection forcefully, comitting any changes required to be comitted
+    """
     def _close(self):
         self._conn.commit()
         self._conn.close()

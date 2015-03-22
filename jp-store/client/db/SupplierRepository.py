@@ -16,6 +16,9 @@ class SupplierRepository(client.db.Repository.Repository):
         super().__init__()
     
     
+    """
+        Returns a list of all known suppliers
+    """
     def get_all_suppliers(self):
         #returns all information for the suppliers table
         cursor = self._conn.cursor()            
@@ -28,6 +31,9 @@ class SupplierRepository(client.db.Repository.Repository):
         
         return results
     
+    """
+        Given a supplier ID, 'sid', returns the supplier attributes to be used
+    """
     def get_supplier_by_id(self, sid):
         #select a particular supplier by there id
         cursor = self._conn.cursor()
@@ -40,6 +46,10 @@ class SupplierRepository(client.db.Repository.Repository):
     
         return results[0]
     
+    """
+        Given the 'sid' of a supplier, updates their fields with the specified
+        parameters given
+    """
     def edit_suppliers(self,sid,address,country,name,phone):
         #Allows you to change all the details of a particular supplier
         cursor = self._conn.cursor()
