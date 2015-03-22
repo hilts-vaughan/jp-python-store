@@ -3,7 +3,6 @@ import client.states.StartMenuState
 import client.db.CustomerRepository
 import client.db.OrderRepository
 import client.db.CartRepository
-import client.db.OrderItemRepository
 
 class CustomerMenuState(client.states.BaseState.BaseState):
     
@@ -128,13 +127,15 @@ class CustomerMenuState(client.states.BaseState.BaseState):
             product=repo.get_stock_by_pid(pid)
             print("{} {} are in stock".format(product[0], product[1]))
         return
+    
     def add_cart(self):
         #allows the user to add a new item to the cart 
         pid=self._get_product_id()
-        amount=input("how many of that would you like? ")
+        amount=input("How many of that would you like? ")
         with client.db.CartRepository.CartRepository() as repo:
             repo.create_new_cart_item(amount,self._customer[0],pid)
         return
+    
     def purchase(self):
         #triggers the checkout option from cart repostiory which takes your current cart and makes an order
         with client.db.CartRepository.CartRepository() as repo:
@@ -148,7 +149,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         with client.db.ProductRepository.ProductRepository() as repo:
             products = repo.get_all_products_key(product_start)
             for(pid, name,price) in products:
-                print("{}) {} (Costs: {})".format(pid, name,price))
+                print("{}) {} (Costs: ${})".format(pid, name,price))
 
         return
     
@@ -159,9 +160,10 @@ class CustomerMenuState(client.states.BaseState.BaseState):
             products = repo.get_all_products_cust()
             #prints the list
             for(pid, name,price) in products:
-                print("{}) {} (Costs: {})".format(pid, name,price))
+                print("{}) {} (Costs: ${})".format(pid, name,price))
         #asks the user to select one
         return int(input("Please enter a product ID: "))
+    
     def check_cart(self):
         #Shows the user what is in there cart
         with client.db.CartRepository.CartRepository() as repo:
