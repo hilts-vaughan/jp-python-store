@@ -125,6 +125,10 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         
         return (lid, f_name, l_name, addr, phone)
             
+            
+    """
+    Checks the stock of a product by getting a product ID
+    """
     def check_stock(self):
         #allows the user to check the stock of a product
         pid=self._get_product_id()
@@ -132,7 +136,9 @@ class CustomerMenuState(client.states.BaseState.BaseState):
             product=repo.get_stock_by_pid(pid)
             print("{} {} are in stock".format(product[0], product[1]))
         return
-    
+    """
+    Adds an item to a customer cart
+    """
     def add_cart(self):
         #allows the user to add a new item to the cart 
         pid=self._get_product_id()
@@ -140,14 +146,19 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         with client.db.CartRepository.CartRepository() as repo:
             repo.create_new_cart_item(amount,self._customer[0],pid)
         return
-    
+    """
+    Take the current customers cart turn it into an order and then empty it
+    """
     def purchase(self):
         #triggers the checkout option from cart repostiory which takes your current cart and makes an order
         with client.db.CartRepository.CartRepository() as repo:
             repo.checkout(self._customer[0])
-        #This does not delete your cart
+        self.clear_cart()
         return
-    
+    """
+    get the first few letters of a product from the user and print a list of
+    products that start with the same name in readable format
+    """
     def search(self):
         #Searches the database for products that start with a string obtained below
         product_start=input("Enter a partial search query to look for in items: ")
@@ -157,7 +168,10 @@ class CustomerMenuState(client.states.BaseState.BaseState):
                 print("{}) {} (Costs: ${})".format(pid, name,price))
 
         return
-    
+    """
+    give a readable list of all products for the customer and get a
+    product id from the customer
+    """
     def _get_product_id(self):
         #Presents a list of useful information to the customer about given products
         #with the purpose of getting a product id selected by the user
@@ -168,7 +182,9 @@ class CustomerMenuState(client.states.BaseState.BaseState):
                 print("{}) {} (Costs: ${})".format(pid, name,price))
         #asks the user to select one
         return int(input("Please enter a product ID: "))
-    
+    """
+    Print the current customers cart
+    """
     def check_cart(self):
         #Shows the user what is in there cart
         with client.db.CartRepository.CartRepository() as repo:
@@ -176,7 +192,9 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         print("Cart contains")
         for (cartItem,amount,cid,pid) in result:
             print("You have ordered {} of item {}".format(amount,pid))
-    
+    """
+    Empty the current customers cart
+    """
     def clear_cart(self):
         #empties the users cart
         with client.db.CartRepository.CartRepository() as repo:
