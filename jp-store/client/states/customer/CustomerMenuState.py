@@ -13,15 +13,16 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         
         # Setup our handlers
         self.register_menu_item("Back to main", client.states.StartMenuState.StartMenuState, True)
-        self.register_menu_item("View my orders", self.view_my_orders, False)
-        self.register_menu_item("Update my account profile", self.update_profile, False)
-        self.register_menu_item("check stock", self.check_stock, False)
-        self.register_menu_item("purchase item", self.purchase, False)
+        self.register_menu_item("View my Orders", self.view_my_orders, False)
+        self.register_menu_item("Update my Account", self.update_profile, False)
+        self.register_menu_item("Check Stock", self.check_stock, False)
+        self.register_menu_item("Purchase Item", self.purchase, False)
         self.register_menu_item("Search", self.search, False)
         self.register_menu_item("Add to Cart", self.add_cart, False)
-        self.register_menu_item("See cart", self.check_cart, False)
-        self.register_menu_item("Clear cart", self.clear_cart, False)
-        #when we enter the customer menu they must select a user
+        self.register_menu_item("See Cart", self.check_cart, False)
+        self.register_menu_item("Clear Cart", self.clear_cart, False)
+        
+        # Attempt to authenticate a user, show them their options
         with client.db.CustomerRepository.CustomerRepository() as repo:
             results = repo.get_all_customers()
             
@@ -30,13 +31,17 @@ class CustomerMenuState(client.states.BaseState.BaseState):
                 
         
         # We will require some state, so let's try and get it here
+        
         print("\nBefore we continue, we will need to authenticate under which user you are. Please select a user to operate as.")
         print("Alternatively, simply type 0 to register a new user.")
-        #pick a user
+        
+    
         choice = int(input("User ID Choice: "))
-        #or make a new one
+        
+        # New user
         if choice is 0:
             self._customer = self.register_new_user()
+        # Selected a user
         else:            
             self._customer = results[choice - 1]
         
@@ -48,7 +53,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
     """
     def view_my_orders(self):
         
-        #Check the orders of the active customer        
+        # Check the orders of the active customer        
         with client.db.OrderRepository.OrderRepository() as repo:
             # Fetch my orders
             # customer[0] is the customer id
