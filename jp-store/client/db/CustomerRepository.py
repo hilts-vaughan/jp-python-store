@@ -75,7 +75,7 @@ class CustomerRepository(client.db.Repository.Repository):
         return lid        
         
     """
-        Fetches all available customers and returns them
+        Fetches all available customers and returns them as a list.
     """
     def get_all_customers(self):
                     
@@ -90,12 +90,14 @@ class CustomerRepository(client.db.Repository.Repository):
         return results    
     
     """
-        Fetches a tuple of customer ID's that
+        Fetches a tuple of N customer ID's that have ordered the most stuff.
+        If less than 'n' of these customers exist, then all of available
+        customers will be returned.
     """
-    def get_top_ordering_customers(self):
+    def get_top_ordering_customers(self, n):
         
         cursor = self._conn.cursor()
-        query = ("SELECT CustomerAccount_CustomerId, COUNT(*) FROM `order` GROUP BY CustomerAccount_CustomerId;")
+        query = ("SELECT CustomerAccount_CustomerId, FirstName, COUNT(*) FROM `order` INNER JOIN `customeraccount` GROUP BY CustomerAccount_CustomerId LIMIT {};".format(n))
         cursor.execute(query)
         results = cursor.fetchall()
         

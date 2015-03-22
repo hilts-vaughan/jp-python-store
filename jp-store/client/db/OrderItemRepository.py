@@ -23,6 +23,8 @@ class OrderItemRepository(client.db.Repository.Repository):
         lid = cursor.lastrowid
         cursor.close()
         return lid
+    
+
     def make_orders_from_cart(self,cartStuff,ordernum):
         #taking a customers cart (takes all information) 
         #generates an order item for each of them

@@ -16,7 +16,7 @@ class OrderRepository(client.db.Repository.Repository):
     
     
     """
-        Returns a set of order data for a specific user
+        Returns a set of order data for a specific user, given their customer ID.
     """
     def get_orders_for(self, cid):
         #get all the orders from a given customer and return a list

@@ -15,6 +15,9 @@ class CategoryRepository(client.db.Repository.Repository):
         super().__init__()
     
     
+    """
+        Fetches all the categories from a MySQL backed database with all their fields and returns them
+    """
     def get_all_categories(self):
                     
         cursor = self._conn.cursor()            
