@@ -17,11 +17,17 @@ class StateContext:
     def handle_request(self, user_command):
         self._currentState.handle_request(user_command)
     
+    """
+        Sets the current state in the state machine according to the 'state'
+        passed into it.
+    """
     def set_state(self, state):
         self._currentState = state
         self._currentState.parent = self
         self._currentState.draw()
-        print("State moving to: " + state.name)
     
+    """
+        Returns the currently executing state
+    """
     def get_state(self):
         return self._currentState

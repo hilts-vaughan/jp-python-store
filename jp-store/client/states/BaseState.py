@@ -2,7 +2,11 @@ from client.states.MenuItem import MenuItem
 
 """
     Represents a bare, abstract state that can be used to implement various menu
-    options throughout the application.
+    options throughout the application. All states throughout the client application
+    should derive from this so they can register with the state context.
+    
+    This base class provides utilities for handling inputs, transitioning between states,
+    and drawing themselves
 """
 class BaseState:
     
