@@ -6,6 +6,9 @@ Created on Mar 19, 2015
 
 import client.db.Repository
 
+"""
+    A repository connected to a MySQL backend used for fetching: Suppliers
+"""
 class SupplierRepository(client.db.Repository.Repository):
 
     # Get the super

@@ -7,6 +7,9 @@ from _overlapped import NULL
 import client.db.Repository
 import time
 
+"""
+    A repository connected to a MySQL backend used for fetching: Customer cart items
+"""
 class CartRepository(client.db.Repository.Repository):
 
     # Get the super

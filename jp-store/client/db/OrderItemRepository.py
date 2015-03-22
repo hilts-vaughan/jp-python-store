@@ -5,6 +5,9 @@ Created on Mar 20, 2015
 '''
 import client.db.Repository
 
+"""
+    A repository connected to a MySQL backend used for fetching: Order item details
+"""
 class OrderItemRepository(client.db.Repository.Repository):
 
     # Get the super

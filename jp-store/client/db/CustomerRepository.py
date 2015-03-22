@@ -5,6 +5,9 @@ Created on Mar 12, 2015
 '''
 import client.db.Repository
 
+"""
+    A repository connected to a MySQL backend used for fetching: Customers
+"""
 class CustomerRepository(client.db.Repository.Repository):
 
     # Get the super
@@ -26,6 +29,9 @@ class CustomerRepository(client.db.Repository.Repository):
     
         return results[0]
 
+    """
+        Given a customer ID, fetches their home mailing address
+    """
     def get_customer_address_by_id(self, cid):
         #gets the mailing address for a given customer Used for orders
         cursor = self._conn.cursor()
@@ -38,6 +44,9 @@ class CustomerRepository(client.db.Repository.Repository):
     
         return results[0]
     
+    """
+        Given a set of parameters and a customer ID, updates their profile with the given parameters.
+    """
     def update_customer_by_id(self, cid, f_name, l_name, addr, phone):
         
         cursor = self._conn.cursor()
@@ -49,6 +58,10 @@ class CustomerRepository(client.db.Repository.Repository):
     
         return
     
+    """
+        Given a set of parameters, creates a new user and returns the unique ID for them
+        that was just created.
+    """
     def create_new_customer(self, f_name, l_name, addr, phone):
         cursor = self._conn.cursor()
         
@@ -61,6 +74,9 @@ class CustomerRepository(client.db.Repository.Repository):
         
         return lid        
         
+    """
+        Fetches all available customers and returns them
+    """
     def get_all_customers(self):
                     
         cursor = self._conn.cursor()            

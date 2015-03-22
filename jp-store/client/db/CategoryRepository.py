@@ -5,6 +5,9 @@ Created on Mar 12, 2015
 '''
 import client.db.Repository
 
+"""
+    A repository connected to a MySQL backend used for fetching: Categories
+"""
 class CategoryRepository(client.db.Repository.Repository):
 
     # Get the super
