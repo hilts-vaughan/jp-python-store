@@ -33,6 +33,9 @@ class CartRepository(client.db.Repository.Repository):
         # Clean up the cursor
         cursor.close()
         return results
+    """
+       Gets all the cart items for a given customer but only the information needed for orders
+    """
     def get_cart_items_for_orders(self,cid):
         #returns only the amount and the pid
         cursor = self._conn.cursor()            
@@ -42,7 +45,9 @@ class CartRepository(client.db.Repository.Repository):
         # Clean up the cursor
         cursor.close()
         return results
-        
+    """
+    Creates a new cart item
+    """
     def create_new_cart_item(self,amount,cid,pid):
         #makes a new cart item
         cursor = self._conn.cursor()  
@@ -52,6 +57,10 @@ class CartRepository(client.db.Repository.Repository):
         # Clean up the cursor
         cursor.close()
         
+    """
+       Makes an order for the current customer and makes order items out of the cart items
+        This results in an order and items linked to it.
+    """
     def checkout(self, cid):
         #This function takes a user cart and makes orders out of it
         #It does not clear the cart
@@ -68,6 +77,9 @@ class CartRepository(client.db.Repository.Repository):
         with client.db.OrderItemRepository.OrderItemRepository() as repo:
             repo.make_orders_from_cart(results,ordernum)
         return
+    """
+        Removes the customers cart fromt eh database
+    """
     def emptyCart(self,cid):
         #delete everything in a given customers cart
         cursor = self._conn.cursor()            
