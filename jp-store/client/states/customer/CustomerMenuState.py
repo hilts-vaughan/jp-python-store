@@ -220,6 +220,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
             print("Stock:           {}".format(result.product[2]))
             print("Price:           ${}".format(result.product[4]))
             print("Supplier:        {}".format(result.product[5]))
+            print("Category:        {}".format(result.product[6]))
             
             print("\nSeries: ")
             for series in result.series:

@@ -37,11 +37,16 @@ class ProductRepository(client.db.Repository.Repository):
     """
     def get_complete_info_by_pid(self, pid):
         
-        #Return a list of all products, Name, ID and Stock
+        # Return a list of all products, Name, ID and Stock
+        # A LEFT JOIN is required as there may be no suppliers, and we don't want to return nothing if a product is not supplied by anyone yet
+        
         cursor = self._conn.cursor()            
-        query = ("""SELECT product.ProductId, product.Name As ProductName, Stock, Description, Price, supplier.Name As SupplierName FROM product 
+        query = ("""SELECT product.ProductId, product.Name As ProductName, Stock, product.Description, Price, supplier.Name As SupplierName, UCASE(category.Name) as CategoryName FROM product 
                 LEFT JOIN product_has_supplier ON (product.ProductId = product_has_supplier.Product_ProductId) 
                 LEFT JOIN supplier ON (product_has_supplier.Supplier_SupplierId = supplier.SupplierId)
+
+                LEFT JOIN category ON (product.Category_CategoryId = category.CategoryId)
+
                 WHERE product.ProductId = {};""".format(pid))
         
         
