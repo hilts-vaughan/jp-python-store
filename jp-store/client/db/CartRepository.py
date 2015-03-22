@@ -5,6 +5,8 @@ Created on Mar 19, 2015
 '''
 from _overlapped import NULL
 import client.db.Repository
+import client.db.OrderItemRepository
+
 import time
 
 """
