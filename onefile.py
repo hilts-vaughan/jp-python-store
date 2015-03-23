@@ -933,7 +933,7 @@ class CustomerMenuState(BaseState):
             result=repo.get_cart_for(self._customer[0])
         print("Cart contains")
         for (cartItem,amount,cid,pid) in result:
-            print("You have ordered {} of item {}".format(amount,pid))
+            print("You have {} of item {} in your cart".format(amount,pid))
     """
     Empty the current customers cart
     """
