@@ -16,7 +16,7 @@ class CustomerMenuState(client.states.BaseState.BaseState):
         self.register_menu_item("View my Orders", self.view_my_orders, False)
         self.register_menu_item("Update my Account", self.update_profile, False)
         self.register_menu_item("Check Stock", self.check_stock, False)
-        self.register_menu_item("Purchase Item", self.purchase, False)
+        self.register_menu_item("Purchase Items", self.purchase, False)
         self.register_menu_item("Search", self.search, False)
         self.register_menu_item("Add to Cart", self.add_cart, False)
         self.register_menu_item("See Cart", self.check_cart, False)
