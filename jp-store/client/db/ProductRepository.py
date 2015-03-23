@@ -117,7 +117,7 @@ class ProductRepository(client.db.Repository.Repository):
     def get_all_products_key(self,searchQuery):
         # Returns the product Name Id and price to show the customer
         #takes in a series of character to filter results
-        #searches from the start
+        #searches for anything that contains searchQuery
         cursor = self._conn.cursor()            
         query = ("SELECT ProductId, Name, Price FROM product WHERE Name LIKE '%{}%'".format(searchQuery))
         cursor.execute(query)

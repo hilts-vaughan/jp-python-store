@@ -161,10 +161,10 @@ class CustomerMenuState(client.states.BaseState.BaseState):
     products that start with the same name in readable format
     """
     def search(self):
-        #Searches the database for products that start with a string obtained below
-        product_start=input("Enter a partial search query to look for in items: ")
+        #Searches the database for products that contains a string obtained below
+        productPortion=input("Enter a partial search query to look for in items: ")
         with client.db.ProductRepository.ProductRepository() as repo:
-            products = repo.get_all_products_key(product_start)
+            products = repo.get_all_products_key(productPortion)
             for(pid, name,price) in products:
                 print("{}) {} (Costs: ${})".format(pid, name,price))
 
