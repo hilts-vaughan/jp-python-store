@@ -1218,13 +1218,10 @@ class AdminMenuState(BaseState):
 
 @note: This is the main application runtime file. Almost no work is actually done directly
 here, instead it is all done within the respective states that house the actions. If you want
-to see logic for different tasks, consider viewing:
+to see logic for different tasks, consider viewing the respective repo's
 
-    states/admin/AdminMenuState.py
-    states/customer/CustomerMenuState.py
-    
-For inner-workings of how states operate on a lower level, please visit states/BaseState.py
 
+For inner-workings of how states operate on a lower level, please visit BaseState
 """
 
 
