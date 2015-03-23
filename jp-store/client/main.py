@@ -14,9 +14,15 @@ For inner-workings of how states operate on a lower level, please visit states/B
 
 """
 
+import sys
+import os
+
+# Add to module path for OS problems
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from client.states.StateContext import StateContext
 import client.states.StartMenuState
-import sys
+
 
 print("*** Application has begun. At any menu, simply type 'q' to quit the application. ***")
 
